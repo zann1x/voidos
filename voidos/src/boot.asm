@@ -39,4 +39,4 @@ msg:
 hang:
     jmp hang
     times 510-($-$$) db 0       ; Fill the rest of the 512 bytes in the MBR with zeroes
-    dw 0xaa55                   ; Magic bytes indicating an executable MBR to the BIOS
+    dw 0xaa55                   ; Magic bytes (in little endian) indicating an executable MBR to the BIOS

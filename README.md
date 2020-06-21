@@ -8,14 +8,22 @@ Welcome to the void - the operating system for nothing.
 
 ## 🚀 Prerequisites
 
-- GCC
 - Make
 - NASM
 - QEMU
 
+```
+$ sudo apt-get install build-essential nasm qemu qemu-system
+```
+
 ## 👨‍💻 Getting up and running
 
 - Execute `make qemu` to build and run
+
+Further instructions
+
+- `make` to execute a build
+- `make clean` to remove all built binaries
 
 ## 🔗 Dependencies
 
