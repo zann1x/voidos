@@ -9,7 +9,7 @@
     mov [BOOT_DRIVE], dl        ; Boot drive is stored in dl, let's better remember that
 
     ;; Hello world
-    mov bx, MESSAGE
+    mov bx, MESSAGE_HELLO_WORLD
     call print
     call print_nl
 
@@ -35,16 +35,44 @@
     call print_hex
     call print_nl
 
+    ;; Enter 32-bit protected mode
+    mov bp, 0x9000
+    mov sp, bp
+    mov bx, MESSAGE_REAL_MODE
+    call print
+    call print_nl
+    call switch_to_pm           ; Enter the 32-bit protected mode.
+                                ; We never return from here
+
     jmp $
 
+    %include "voidos/src/load_disk.asm"
     %include "voidos/src/print_string.asm"
     %include "voidos/src/print_hex.asm"
-    %include "voidos/src/load_disk.asm"
+
+    %include "voidos/src/gdt.asm"
+    %include "voidos/src/print_string_pm.asm"
+    %include "voidos/src/switch_to_pm.asm"
+
+[bits 32]
+;; Arrival point after switching to and initializing protected mode
+begin_pm:
+    ;; Hello 32-bit protected mode
+    mov ebx, MESSAGE_PROTECTED_MODE
+    call print_string_pm
+
+    jmp $
 
 ;; Global variables
-MESSAGE:
-    db 'Hello world!', 0
-    
+MESSAGE_HELLO_WORLD:
+    db 'Hello world', 0
+
+MESSAGE_REAL_MODE:
+    db 'We are in the real world', 0
+
+MESSAGE_PROTECTED_MODE:
+    db 'Welcome to the protected world', 0
+
 BOOT_DRIVE:
     db 0
 
