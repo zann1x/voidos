@@ -55,5 +55,5 @@ dw 0xaa55                   ; Magic bytes (in little endian) indicating an execu
 ;; The first 512 byte are loaded as part of the boot sector.
 ;; (sector 1 of cylinder 0 of head 0 of hdd 0)
 ;; Let's actually load data beyond that.
-times 256 dw 0xdada         ; Sector 2
-times 256 dw 0xabba         ; Sector 3
+times 256 dw 0xdabe         ; Sector 2
+times 256 dw 0xabec         ; Sector 3

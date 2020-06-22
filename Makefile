@@ -6,3 +6,6 @@ qemu: build
 
 clean:
 	rm bin/*.bin
+
+byte: build
+	od -t x1 -A n bin/boot.bin
