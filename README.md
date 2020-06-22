@@ -22,7 +22,7 @@ $ sudo apt-get install build-essential nasm qemu qemu-system
 
 Further instructions
 
-- `make` to execute a build
+- `make` or `make build` to execute a build
 - `make clean` to remove all built binaries
 
 ## 🔗 Dependencies
