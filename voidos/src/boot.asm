@@ -1,42 +1,59 @@
 ;; Load the location where the MBR is loaded into the
 ;; data segment register ds for segment addressing.
 ;; (Values cannot be loaded directly into ds)
-;mov ax, 0x07c0
+;mov ax, 0x07c0              ; Address is multiplied with 16
+                             ; (0x07c0*16+offset = 0x7c00+offset)
 ;mov ds, ax                  ; Load value into data segment register
 [org 0x7c00]
 
-;; Set up the interrupt handler
-;mov ah, 0x0                 ; 0x0 refers to setting video mode and size
-;mov al, 0x3                 ; 0x3 means video size should be 80x25 characters
-;int 0x10                    ; Interrupt CPU and call handler for video services
+    mov [BOOT_DRIVE], dl        ; Boot drive is stored in dl, let's better remember that
 
-;; Set up the character printing loop.
-;; Register si is used because the lodsb instruction uses the
-;; segmented address ds:si to load a byte from that location.
-mov si, msg                 ; Move pointer to address of message into register si
-mov ah, 0x0E                ; Use 0x10 interrupt for printing to the screen (tty mode)
+    ;; Hello world
+    mov bx, MESSAGE
+    call print
+    call print_nl
 
-;; Loop to print characters to the screen
-print_character_loop:
-    ;; Load byte into register al from address ds:si
-    ;; and move register si to the next byte.
-    ;; (load string char by char)
-    lodsb
+    ;; Hello hex
+    mov dx, 0xface
+    call print_hex
+    call print_nl
 
-    or al, al               ; Check if the character is zero (end of string)
-    jz hang                 ; Jump to hang if zero is returned
+    ;; Load data from disk
+    mov bp, 0x8000              ; Set the stack safely far out of the way
+    mov sp, bp
 
-    int 0x10                ; Print character to the screen
+    mov bx, 0x9000              ; Load from 0x0000 (es) to 0x9000 (bx)
+    mov dh, 2                   ; Load 2 sectors
+    mov dl, [BOOT_DRIVE]
+    call load_disk
 
-    jmp print_character_loop    ; Jump to start of loop to print another character
+    mov dx, [0x9000]            ; Print the first loaded word stored at 0x9000
+    call print_hex
+    call print_nl
 
-;; The message to print to the screen stored
-;; at address msg
-msg:
-    ;; "Hello world!\r\n\0"
-    db 'Hello world!', 13, 10, 0
+    mov dx, [0x9000 + 512]      ; Print the first word of the second loaded sector
+    call print_hex
+    call print_nl
 
-hang:
-    jmp hang
-    times 510-($-$$) db 0       ; Fill the rest of the 512 bytes in the MBR with zeroes
-    dw 0xaa55                   ; Magic bytes (in little endian) indicating an executable MBR to the BIOS
+    jmp $
+
+    %include "voidos/src/print_string.asm"
+    %include "voidos/src/print_hex.asm"
+    %include "voidos/src/load_disk.asm"
+
+;; Global variables
+MESSAGE:
+    db 'Hello world!', 0
+    
+BOOT_DRIVE:
+    db 0
+
+;; Bootsector padding
+times 510-($-$$) db 0       ; Fill the rest of the 512 bytes in the MBR with zeroes
+dw 0xaa55                   ; Magic bytes (in little endian) indicating an executable MBR to the BIOS
+
+;; The first 512 byte are loaded as part of the boot sector.
+;; (sector 1 of cylinder 0 of head 0 of hdd 0)
+;; Let's actually load data beyond that.
+times 256 dw 0xdada         ; Sector 2
+times 256 dw 0xabba         ; Sector 3
