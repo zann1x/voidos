@@ -1,12 +1,19 @@
-void dummy_function(void) {
-}
+#include "cpu/types.h"
+#include "kernel/port.c"
+#include "kernel/util.c"
+#include "drivers/screen.c"
 
-void main(void) {
-    // Point a char pointer to the first text cell of video memory (i.e. top-left)
-    char* video_memory = (char*)0xb8000;
-    // At the address pointed to, store the character 'X'
-    // TL;DR: display 'X' at the top-left of the screen
-    *video_memory = 'X';
+int main(int argc, char* argv[]) {
+    clear_screen();
+    for (int i = 0; i < 24; i++) {
+        char str[255];
+        int_to_ascii(i, str);
+        print_at(str, 0, i);
+    }
 
-    dummy_function();
+    print_at("This text forces the kernel to scroll. Row 0 will disappear. ", 56, 24);
+    print("And with this text, the kernel will scroll again, and row 1 will "
+          "disappear too!");
+
+    return 0;
 }
