@@ -20,13 +20,13 @@
 
     jmp $
 
-    %include "voidos/src/load_disk.asm"
-    %include "voidos/src/print_string.asm"
-    %include "voidos/src/print_hex.asm"
+    %include "boot/load_disk.asm"
+    %include "boot/print_string.asm"
+    %include "boot/print_hex.asm"
 
-    %include "voidos/src/gdt.asm"
-    %include "voidos/src/print_string_pm.asm"
-    %include "voidos/src/switch_to_pm.asm"
+    %include "boot/gdt.asm"
+    %include "boot/print_string_pm.asm"
+    %include "boot/switch_to_pm.asm"
 
 [bits 16]
 ;; Load the kernel code from disk
