@@ -61,7 +61,6 @@ void isr_handler(registers_t reg) {
     int_to_ascii(reg.int_num, str);
     print(str);
     print("\n");
-    // TODO: this doesn't print the exception message
     print(exception_messages[reg.int_num]);
     print("\n");
 }
