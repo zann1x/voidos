@@ -7,6 +7,11 @@
 #include "cpu/idt.c"
 #include "cpu/isr.c"
 
+/*
+====================
+main
+====================
+*/
 int main(int argc, char* argv[]) {
     clear_screen();
     // for (int i = 0; i < 24; i++) {

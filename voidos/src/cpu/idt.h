@@ -1,4 +1,8 @@
 /*
+ * Interrupt descriptor table
+ */
+
+/*
  * How every interrupt gate (handler) is defined
  */
 struct idt_entry_struct {

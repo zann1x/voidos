@@ -1,3 +1,7 @@
+/*
+ * Interrupt service routinges
+ */
+
 struct registers
 {
     /* Data segment selector */

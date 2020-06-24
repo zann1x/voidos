@@ -1,10 +1,16 @@
 #include "cpu/isr.h"
 
-/* Can't do this with a loop because we need the address
- * of the function names */
+/*
+====================
+isr_install
+
+Set up the interrupt service routines for all CPU interrupts
+====================
+*/
 void isr_install(void) {
     memory_set(&idt_entries, 0, sizeof(idt_entry_t) * IDT_ENTRIES);
 
+    /* Can't do this with a loop because the address of the function names are needed */
     idt_set_gate(0, (u32)isr0);
     idt_set_gate(1, (u32)isr1);
     idt_set_gate(2, (u32)isr2);
@@ -42,7 +48,13 @@ void isr_install(void) {
     idt_set();
 }
 
-/* Gets called from the ASM interrupt handler stub */
+/*
+====================
+isr_handler
+
+Gets called from the ASM interrupt handler stub
+====================
+*/
 void isr_handler(registers_t reg) {
     print("Received interrupt: ");
     char str[3];
