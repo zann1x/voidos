@@ -13,7 +13,7 @@ switch_to_pm:
 
     jmp CODE_SEG:init_pm        ; Make a far jump (to a new segment) to the 32-bit code.
                                 ; This forces the CPU to flush its cache of pre-fetched
-                                ; and real-moded dcoded instructions
+                                ; and real-moded decoded instructions
 
 [bits 32]
 ;; Initialize registers and stack once in protected mode
