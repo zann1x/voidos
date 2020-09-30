@@ -1,3 +1,6 @@
+https://web.archive.org/web/20160412174753/http://www.jamesmolloy.co.uk/tutorial_html/index.html
+https://web.archive.org/web/20160330040433/http://www.osdever.net/bkerndev/index.php
+
 # 🕳️ voidos
 
 Welcome to the void - the operating system for nothing.
